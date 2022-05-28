@@ -8,6 +8,9 @@ from ship import Ship
 
 from bullets import Bullets
 
+from aliens import Alien
+
+
 class AlienInvasion:
 # manages all of the game
 
@@ -20,11 +23,13 @@ class AlienInvasion:
         # NOTE: Maybe I can make an if/else statement to allow screen size changes
         self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
         # self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+        
         pygame.display.set_caption('Alien Invasion')
-
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
 
+        self._create_fleet()
 
 
     # starts main loop for game
@@ -36,6 +41,10 @@ class AlienInvasion:
             self._update_bullets()
             self._update_screen()
             
+    def _create_fleet(self):
+        ''' Create the fleet from alien'''
+        alien = Alien(self)
+        self.aliens.add(alien)
 
 
     def _update_bullets(self):
@@ -47,8 +56,8 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
                 
 
-            # responds to keypresses and mouse events
-            # helper method
+    # responds to keypresses and mouse events
+    # helper method
     def _check_events(self):
         # watches for events (keyboard and mouse)
         for event in pygame.event.get():
@@ -95,6 +104,8 @@ class AlienInvasion:
 
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        
+        self.aliens.draw(self.screen)
 
         # makes the most recently drawn screen visible
         pygame.display.flip()
