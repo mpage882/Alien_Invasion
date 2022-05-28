@@ -18,8 +18,8 @@ class AlienInvasion:
         self.settings = Settings()
 
         # NOTE: Maybe I can make an if/else statement to allow screen size changes
-        # self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
-        self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
+        # self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
         pygame.display.set_caption('Alien Invasion')
 
         self.ship = Ship(self)
@@ -33,8 +33,19 @@ class AlienInvasion:
 
             self._check_events()
             self.ship.update()
+            self._update_bullets()
             self._update_screen()
-            self.bullets.update()
+            
+
+
+    def _update_bullets(self):
+        # Updates bullets position 
+        self.bullets.update()   
+        # deletes old ones
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+                
 
             # responds to keypresses and mouse events
             # helper method
@@ -49,6 +60,7 @@ class AlienInvasion:
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
+
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
             # Move the ship to the right
@@ -60,6 +72,7 @@ class AlienInvasion:
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
 
+
     def _check_keyup_events(self, event):
         # Makes movement stop when not pressing keys
         if event.key == pygame.K_RIGHT:
@@ -67,15 +80,17 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
                 
+
     def _fire_bullet(self):
         ''' Create a new bullet and add it to the bullets group. '''
-        new_bullet = Bullets(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullets(self)
+            self.bullets.add(new_bullet)
+
 
     # updates images on screen and flip  to new screen
     def _update_screen(self):
-        self.screen.fill(self.settings.bg_color)
-        
+        self.screen.fill(self.settings.bg_color)  
         self.ship.blitme()
 
         for bullet in self.bullets.sprites():
