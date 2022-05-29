@@ -43,6 +43,7 @@ class AlienInvasion:
             self._update_screen()
 
     def _update_aliens(self):
+        ''' Updates positions of all aliens in fleet '''
         self.aliens.update()
 
     def _create_fleet(self):
