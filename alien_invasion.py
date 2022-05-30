@@ -1,5 +1,7 @@
 import sys
 
+from time import sleep   # creates pause in game
+
 import pygame
 
 from settings import Settings
@@ -63,6 +65,10 @@ class AlienInvasion:
 
         ''' Updates positions of all aliens in fleet '''
         self.aliens.update()
+
+        # Look for alien-ship collision
+        if pygame.sprite.spritecollideany(self.ship, self.aliens):
+            print("Ship hit!!!") # replace to test
 
 
     def _create_fleet(self):
