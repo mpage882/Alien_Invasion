@@ -6,6 +6,8 @@ import pygame
 
 from settings import Settings
 
+from game_stats import GameStats
+
 from ship import Ship 
 
 from bullets import Bullets
@@ -21,16 +23,15 @@ class AlienInvasion:
         pygame.init()
 
         self.settings = Settings()
-
         # NOTE: Maybe I can make an if/else statement to allow screen size changes
         self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
-        # self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-        
+        # self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)       
         pygame.display.set_caption('Alien Invasion')
+        
+        self.stats = GameStats(self) # create instance to store game stats
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
-
         self._create_fleet()
 
 
@@ -43,6 +44,34 @@ class AlienInvasion:
             self._update_bullets()
             self._update_aliens() 
             self._update_screen()
+
+
+    def _check_aliens_bottom(self):
+        ''' check to see if any alien has reached bottom of the of the screen '''
+        screen_rect = self.screen.get_rect()
+        for alien in self.aliens.sprites():
+            ''' treated the same as collision '''
+            if alien.rect.bottom >= screen_rect.bottom:
+                self._ship_hit()
+                break
+
+
+    def _ship_hit(self):
+        ''' responds to the ship being hit by alien. '''
+        # decrement ships_left
+        self.stats.ships_left -= 1
+
+        # Get rid of any remaining aliens and bullets
+        self.aliens.empty()
+        self.bullets.empty()
+
+        # Create a new fleet and center the ship
+        self._create_fleet()
+        self.ship.center_ship()
+
+        # Pause
+        sleep(1.0)
+
 
     def _check_fleet_edges(self):
         ''' Respond appropriately if any aliens have reached an edge '''
@@ -68,7 +97,10 @@ class AlienInvasion:
 
         # Look for alien-ship collision
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
-            print("Ship hit!!!") # replace to test
+            self._ship_hit() # print("Ship hit!!!") # replace to test
+        
+        # looks for aliens hitting the bottom
+        self._check_aliens_bottom()
 
 
     def _create_fleet(self):
