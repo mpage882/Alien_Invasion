@@ -5,7 +5,10 @@ class GameStats:
         ''' Initialize stats '''
         self.settings = ai_game.settings
         self.reset_stats()
-        self.game_active = True
+
+        # Start game in an inactie state for Play button.
+        self.game_active = False
+        # self.game_active = True
 
     def reset_stats(self):
         ''' Initialize stats that can change during the game '''
