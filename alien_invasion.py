@@ -18,6 +18,7 @@ from bullets import Bullets
 
 from aliens import Alien
 
+# Add-ons: Make it where level keep last level score if you lose a ship
 
 class AlienInvasion:
 # manages all of the game
@@ -167,6 +168,7 @@ class AlienInvasion:
             for aliens in collisions.values():
                 self.stats.score += self.settings.aliens_points * len(aliens)
             self.sb.prep_score()
+            self.sb.check_high_score()
 
         # Destroy existing bullets and create new fleet.
         if not self.aliens:
