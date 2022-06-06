@@ -52,3 +52,11 @@ class Scoreboard:
         if self.stats.score > self.stats.high_score:
             self.stats.high_score = self.stats.score
             self.prep_high_score()
+
+
+''' if -ship:
+        pull last level score 
+        last level score += score
+
+    Maybe write each end level score to file. In loop to where it can be written over each time the game runs.
+'''
