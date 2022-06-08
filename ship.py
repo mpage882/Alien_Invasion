@@ -1,13 +1,15 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class Ship:
+class Ship(Sprite):
 
     # initialize the ship and starting positions
     # get_rect() is from pygame
     
     def __init__(self, ai_game):
         # pulling from Settings class and a_i class
+        super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         self.screen_rect = ai_game.screen.get_rect()

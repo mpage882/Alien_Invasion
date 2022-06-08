@@ -71,8 +71,9 @@ class AlienInvasion:
     def _ship_hit(self):
         ''' responds to the ship being hit by alien. '''
         if self.stats.ships_left > 0:
-            # decrement ships_left
+            # decrements ships_left & updates scoreboard
             self.stats.ships_left -= 1
+            self.sb.prep_ships()
 
             # Get rid of any remaining aliens and bullets
             self.aliens.empty()
@@ -175,6 +176,10 @@ class AlienInvasion:
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+
+            # Increases level.
+            self.stats.level += 1
+            self.sb.prep_level()
                 
 
     def _check_events(self):
@@ -225,6 +230,8 @@ class AlienInvasion:
             self.stats.reset_stats()
             self.stats.game_active = True    
             self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_ships()
 
             # Gets rid of remaining aliens & bullets
             self.aliens.empty()
